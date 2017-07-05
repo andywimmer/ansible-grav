@@ -2,5 +2,5 @@
 # server-0-ip
 
 [prod]
-server-1-ip
+server-1-ip ansible_python_interpreter=/usr/bin/python3
 # server-2-ip
