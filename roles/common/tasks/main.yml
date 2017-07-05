@@ -1,0 +1,16 @@
+---
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    upgrade: dist
+    update_cache: yes
+
+- name: Install base packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+  - make
+  - ufw
+  - unzip
