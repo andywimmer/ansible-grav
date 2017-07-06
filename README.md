@@ -1,6 +1,6 @@
 # Ansible Grav
 
-I'm learning **Ansible** and decided to make a playbook which installs the popular **[Grav](https://getgrav.org/)** CMS, which is [open-source](https://github.com/getgrav/grav). The installation and configuration is based on my production setup that hosts my personal blog.
+I'm learning **[Ansible](https://www.ansible.com/)** and decided to make a playbook which installs the popular **[Grav](https://getgrav.org/)** flat-file CMS, which is [open-source](https://github.com/getgrav/grav). The installation and configuration are based on my production setup that hosts my personal blog.
 
 The target of this playbook is **Ubuntu Server** and I haven't tested any other distros yet. Ubuntu ships with Python3 only, so targets appearing in the hosts file must look like:  
 
@@ -48,9 +48,9 @@ server-1-ip ansible_python_interpreter=/usr/bin/python3
 # server-2-ip
 ```
 
-### Specify your private key file in ansible.cfg (optional)
+### Specify your remote user and private key file in ansible.cfg (possibly optional)
 
-If you are using a specific SSH key for your VPS, uncomment the `private_key_file` line and provide the path.
+If you are using a specific user or SSH key for your VPS specify them here:
 
 ```
 [defaults]
@@ -98,8 +98,19 @@ XX.XX.XX.XX | SUCCESS => {
 
 ## Caveats
 
+Recall the first three words of this readme.
+
 This playbook does not create any users or lock down your sshd_config by disabling root login or password authentication - all of which are recommended if using for production.
 
-**This playbook deletes /var/www/html** prior to installing Grav. For a fresh VPS you're probably fine with that - but you know - warning anyway.
+**This playbook deletes /var/www/html** prior to installing Grav. For a fresh VPS you're probably fine with that - but you know, warning anyway.
 
 This playbook does not install Grav with SSL enabled in the NGINX site. Read the [documentation](https://learn.getgrav.org/webservers-hosting/local/nginx#using-ssl-with-an-existing-certificate) for more information on enabling SSL with an origin certificate.
+
+`become: true` is peppered throughout this playbook to support AWS and the default 'ubuntu' user. I haven't looked, but if there's a better way to do this on a global level that would be great.
+
+## QA
+
+This playbook has been tested under the following scenarios:
+
+*   [Vultr](https://www.vultr.com/) VC2 VPSs running Ubuntu Server 16.04, 16.12 & 17.04
+*   [AWS](https://aws.amazon.com/) EC2 VPS running Ubuntu Server 16.04
