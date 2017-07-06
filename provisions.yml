@@ -1,6 +1,5 @@
 ---
 - hosts: prod
-  user: root
   vars_prompt:
     - name: "domain"
       prompt: "enter your FQDN such as 'example.com' or 'demo1.something.xyz'. Do not include the 'www'"
