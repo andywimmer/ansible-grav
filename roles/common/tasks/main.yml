@@ -6,6 +6,7 @@
     update_cache: yes
 
 - name: Install base packages
+  become: true
   apt:
     name: "{{ item }}"
     state: present

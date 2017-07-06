@@ -1,5 +1,6 @@
 ---
 - name: Install Nginx
+  become: true
   apt:
     name: nginx-extras
     state: present
@@ -7,7 +8,9 @@
     update_cache: yes
 
 - name: Backup default nginx.conf
+  become: true
   shell: mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
 
 - name: Backup default site
+  become: true
   shell: mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
