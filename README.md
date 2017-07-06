@@ -44,15 +44,15 @@ Changing `server-ip` to your target IP:
 server-ip ansible_python_interpreter=/usr/bin/python3
 ```
 
-### Specify your remote user and private key file in ansible.cfg (possibly optional)
+### Specify your remote user and private key file in ansible.cfg
 
-If you are using a specific user or SSH key for your VPS specify them here:
+If you are using a specific user (e.g. 'ubuntu' for AWS) or SSH key for your VPS, specify them here:
 
 ```
 [defaults]
 inventory = hosts
 remote_user = root
-# private_key_file = /path/to/.ssh/key_rsa
+private_key_file = /path/to/.ssh/key_rsa
 ```
 
 ### Test Ansible target connection
@@ -122,5 +122,7 @@ This playbook does not install Grav with SSL enabled in the NGINX site. Read the
 
 This playbook has been tested under the following scenarios:
 
-*   [Vultr](https://www.vultr.com/) VC2 VPSs running Ubuntu Server 16.04, 16.12 & 17.04
 *   [AWS](https://aws.amazon.com/) EC2 VPS running Ubuntu Server 16.04
+*   [DigitalOcean](https://www.digitalocean.com/) Compute droplets running Ubuntu Server 16.04.2, 16.10 &
+*   [Vultr](https://www.vultr.com/) VC2 VPSs running Ubuntu Server 16.04, 16.12 & 17.04
+
