@@ -124,5 +124,5 @@ This playbook has been tested under the following scenarios:
 
 *   [AWS](https://aws.amazon.com/) EC2 VPS running Ubuntu Server 16.04
 *   [DigitalOcean](https://www.digitalocean.com/) Compute droplets running Ubuntu Server 16.04.2, 16.10 & 17.04
-*   [Vultr](https://www.vultr.com/) VC2 VPSs running Ubuntu Server 16.04, 16.12 & 17.04
+*   [Vultr](https://www.vultr.com/) VC2 VPSs running Ubuntu Server 16.04, 16.10 & 17.04
 
