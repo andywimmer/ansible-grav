@@ -2,15 +2,15 @@
 
 I'm learning **[Ansible](https://www.ansible.com/)** and decided to make a playbook which installs the popular **[Grav](https://getgrav.org/)** flat-file CMS, which is [open-source](https://github.com/getgrav/grav). The installation and configuration are based on my production setup that hosts my personal blog.
 
+This playbook installs NGINX, PHP7.1 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from one of my other [repos](https://github.com/andywimmer/grav-nginx-configs) for now, but are basic copies of what appear in the Grav documentation.
+
 The target of this playbook is **Ubuntu Server** and I haven't tested any other distros yet. Ubuntu ships with Python3 only, so targets appearing in the hosts file must look like:  
 
 `server-ip ansible_python_interpreter=/usr/bin/python3`
 
 This is the only way Ansible will be able to connect to a freshly spun-up Ubuntu VPS target.
 
-This playbook installs NGINX, PHP7.1 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from one of my other [repos](https://github.com/andywimmer/grav-nginx-configs) for now, but are basic copies of what appear in the Grav documentation.
-
-## Usage
+# Usage
 
 ### Install Ansible on your host or 'control' machine
 
@@ -78,7 +78,7 @@ XX.XX.XX.XX | SUCCESS => {
 
 3.   Installation will proceed
 
-## Post-installation
+# Post-installation
 
 1.   Assuming you have configured your DNS to point to your target machine, use your browser to navigate to your FQDN - otherwise use your target's IP address.
 
@@ -92,7 +92,7 @@ XX.XX.XX.XX | SUCCESS => {
 
 6.   Get [Grav'n](https://learn.getgrav.org/)!
 
-## Grav notes
+# Grav notes
 
 *   Fully explore the Configuration tabs and hover over the option title to display a bit more info on that setting.
 
@@ -106,7 +106,7 @@ XX.XX.XX.XX | SUCCESS => {
 
 *   The Configuration > Info tab serves as a phpinfo();
 
-## Caveats
+# Caveats
 
 Recall the first three words of this readme.
 
@@ -118,7 +118,7 @@ This playbook does not install Grav with SSL enabled in the NGINX site. Read the
 
 `become: true` is peppered throughout this playbook to support AWS and the default 'ubuntu' user. I haven't looked, but if there's a better way to do this on a global level that would be great.
 
-## QA
+# QA
 
 This playbook has been tested under the following scenarios:
 
