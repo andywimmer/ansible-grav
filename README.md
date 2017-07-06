@@ -4,7 +4,7 @@ I'm learning **[Ansible](https://www.ansible.com/)** and decided to make a playb
 
 The target of this playbook is **Ubuntu Server** and I haven't tested any other distros yet. Ubuntu ships with Python3 only, so targets appearing in the hosts file must look like:  
 
-`127.0.0.1 ansible_python_interpreter=/usr/bin/python3`
+`server-ip ansible_python_interpreter=/usr/bin/python3`
 
 This is the only way Ansible will be able to connect to a freshly spun-up Ubuntu VPS target.
 
@@ -37,15 +37,11 @@ This playbook installs NGINX, PHP7.1 and Grav. It also installs [required](https
 
 ### Modify hosts file
 
-Changing `server-1-ip` to your target IP.
+Changing `server-ip` to your target IP:
 
 ```
-[dev]
-# server-0-ip
-
 [prod]
-server-1-ip ansible_python_interpreter=/usr/bin/python3
-# server-2-ip
+server-ip ansible_python_interpreter=/usr/bin/python3
 ```
 
 ### Specify your remote user and private key file in ansible.cfg (possibly optional)
@@ -84,7 +80,7 @@ XX.XX.XX.XX | SUCCESS => {
 
 ## Post-installation
 
-1.   Assuming you have configured your DNS to point to your target machine, use your browser to navigate to your FQDN, otherwise use your target's IP address.
+1.   Assuming you have configured your DNS to point to your target machine, use your browser to navigate to your FQDN - otherwise use your target's IP address.
 
 2.   The Grav Admin will prompt you to create an admin user. Fill out the form and continue to the dashboard.
 
@@ -94,7 +90,21 @@ XX.XX.XX.XX | SUCCESS => {
 
 5.   Use your browser to navigate to your FQDN or IP address to view the default Grav welcome page.
 
-6.   Get Grav'n!
+6.   Get [Grav'n](https://learn.getgrav.org/)!
+
+## Grav notes
+
+*   Fully explore the Configuration tabs and hover over the option title to display a bit more info on that setting.
+
+*   Enabling [Markdown extra](https://michelf.ca/projects/php-markdown/extra/) in Configuration > System > Markdown section is recommended.
+
+*   Caching is critical and Grav flushes caches upon system changes, so you will probably never want to disable caching - however the setting is there in Configuration > System > Caching.
+
+*   If you aren't developing a custom theme for Grav or otherwise modifying the CSS or JS, you should enable those two pipelines under the Configuration > System > Assets section.
+
+  *   The Configuration > Site tab is where you may specify a site title, author name & email address, custom taxonomies, etc.
+
+*   The Configuration > Info tab serves as a phpinfo();
 
 ## Caveats
 
