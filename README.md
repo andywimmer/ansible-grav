@@ -10,8 +10,6 @@ This is the only way Ansible will be able to connect to a freshly spun-up Ubuntu
 
 This playbook installs NGINX, PHP7.1 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from one of my other [repos](https://github.com/andywimmer/grav-nginx-configs) for now, but are basic copies of what appear in the Grav documentation.
 
----
-
 ## Usage
 
 ### Install Ansible on your host or 'control' machine
@@ -84,8 +82,6 @@ XX.XX.XX.XX | SUCCESS => {
 
 3.   Installation will proceed
 
----
-
 ## Post-installation
 
 1.   Assuming you have configured your DNS to point to your target machine, use your browser to navigate to your FQDN, otherwise use your target's IP address.
@@ -100,8 +96,6 @@ XX.XX.XX.XX | SUCCESS => {
 
 6.   Get Grav'n!
 
----
-
 ## Caveats
 
 This playbook does not create any users or lock down your sshd_config by disabling root login or password authentication - all of which are recommended if using for production.
@@ -109,4 +103,3 @@ This playbook does not create any users or lock down your sshd_config by disabli
 **This playbook deletes /var/www/html** prior to installing Grav. For a fresh VPS you're probably fine with that - but you know - warning anyway.
 
 This playbook does not install Grav with SSL enabled in the NGINX site. Read the [documentation](https://learn.getgrav.org/webservers-hosting/local/nginx#using-ssl-with-an-existing-certificate) for more information on enabling SSL with an origin certificate.
-
