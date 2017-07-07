@@ -13,16 +13,6 @@
     state: present
   when: ansible_distribution == 'Fedora'
 
-- name: Check if nginx.conf exists
-  stat:
-    path: /etc/nginx.conf
-  register: stat_result
-
-- name: Backup default nginx.conf
-  become: true
-  shell: mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
-  when: stat_result.stat.exists == True
-
 - name: Copy nginx.conf
   become: true
   copy:
@@ -31,17 +21,7 @@
     owner: root
     group: root
     mode: 0644
-
-- name: Check if {{ domain }} site exists
-  become: true
-  stat:
-    path: /etc/nginx/sites-available/{{ domain }}
-  register: stat_result
-
-- name: Backup {{ domain }} site configuration
-  become: true
-  shell: mv /etc/nginx/sites-available/{{ domain }} /etc/nginx/sites-available/{{ domain }}.bak
-  when: stat_result.stat.exists == True
+    backup: yes
 
 - name: Create sites-available/sites-enabled if not already there
   become: true
@@ -63,6 +43,7 @@
     owner: root
     group: root
     mode: 0644
+    backup: true
 
 - name: Link sites-enabled configuration
   become: true
