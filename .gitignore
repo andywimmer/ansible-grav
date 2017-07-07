@@ -1,2 +1,4 @@
 provisions.retry
 .vagrant
+hosts
+ansible.cfg
