@@ -6,55 +6,28 @@
     dest: /tmp
     remote_src: True
 
-- name: Delete default webroot
+- name: Delete {{ domain }} webroot
   become: true
   file:
-    path: /var/www/html
+    path: /var/www/{{ domain }}
     state: absent
+
+- name: Create {{ domain }} webroot
+  become: true
+  file: 
+    path: /var/www/{{ domain }}
+    state: directory
 
 - name: Move Grav to webroot
   become: true
-  shell: mv /tmp/grav-admin/ /var/www/html
+  shell: mv /tmp/grav-admin/ /var/www/{{ domain }}/grav-admin
 
-- name: Download permissions script
+- name: Set permissions on webroot
   become: true
-  get_url:
-    url: https://raw.githubusercontent.com/andywimmer/grav-nginx-configs/master/perms.sh
-    dest: /var/www/html
-
-- name: chmod +x permissions script
-  become: true
-  file:
-    path: /var/www/html/perms.sh
-    mode: "a+x"
-
-- name: Run permissions script
-  become: true
-  shell: cd /var/www/html/ && ./perms.sh
-
-- name: Install Grav Nginx site
-  become: true
-  get_url:
-    url: https://raw.githubusercontent.com/andywimmer/grav-nginx-configs/master/sites-available/grav
-    dest: /etc/nginx/sites-available/default
-
-- name: Configure Grav Nginx site with FQDN
-  become: true
-  replace:
-    path: /etc/nginx/sites-available/default
-    regexp: '(\s+)example\.com(\s+.*)?$'
-    replace: '\1{{ domain }}\2'
-
-- name: Configure Grav Nginx site with www.FQDN
-  become: true
-  replace:
-    path: /etc/nginx/sites-available/default
-    regexp: '(\s+)www\.example\.com\;(\s+.*)?$'
-    replace: '\1www.{{ domain }};\2'
-
-- name: Install Grav nginx.conf
-  become: true
-  get_url:
-    url: https://raw.githubusercontent.com/andywimmer/grav-nginx-configs/master/nginx.conf
-    dest: /etc/nginx/nginx.conf
-  notify: restart nginx
+  shell: |
+    chown -R apache:apache /var/www/{{ domain }}/grav-admin
+    find /var/www/{{ domain }}/grav-admin -type f | xargs chmod 664
+    find /var/www/{{ domain }}/grav-admin/bin -type f | xargs chmod 775
+    find /var/www/{{ domain }}/grav-admin -type d | xargs chmod 775
+    find /var/www/{{ domain }}/grav-admin -type d | xargs chmod +s
+    umask 0002

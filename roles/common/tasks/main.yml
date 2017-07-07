@@ -1,17 +1,21 @@
 ---
-- name: Update and upgrade apt packages
-  become: true
-  apt:
-    upgrade: dist
-    update_cache: yes
+# - name: Update and upgrade packages
+#   become: true
+#   package:
+#     upgrade: dist
+#     update_cache: yes
 
 - name: Install base packages
   become: true
-  apt:
+  package:
     name: "{{ item }}"
     state: present
-    update_cache: yes
+    # update_cache: yes
   with_items:
   - make
   - ufw
   - unzip
+
+- name: Disable SELinux (cuz it prevents php-fpm/nginx from working)
+  become: true
+  shell: setenforce 0

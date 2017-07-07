@@ -1,22 +1,29 @@
 ---
-- name: Add PHP repository
+- name: Add PHP repository (apt)
   become: true
   apt_repository:
     repo: ppa:ondrej/php
+  when: ansible_distribution == 'Ubuntu'
 
-- name: Update and upgrade apt packages
+- name: Add PUP repository (yum/dnf)
   become: true
-  apt:
-    upgrade: dist
-    update_cache: yes
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+  when: ansible_distribution == "Fedora"
 
-- name: Install PHP
+# - name: Update and upgrade apt packages
+#   become: true
+#   package:
+#     upgrade: dist
+#     update_cache: yes
+
+- name: Install PHP (Ubuntu)
   become: true
-  apt:
+  package:
     name: "{{ item }}"
     state: present
-    force: yes
-    update_cache: yes
   with_items:
   - php7.1-cli
   - php7.1-common
@@ -33,10 +40,40 @@
   - php-apcu
   - php-pear
   - libyaml-dev
+  when: ansible_distribution == "Ubuntu"
 
-- name: Install YAML parser
+- name: Install YAML parser (Ubuntu)
   become: true
   shell: pecl install yaml-2.0.0
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install PHP (Fedora)
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - libyaml-devel
+  - libzip-devel
+  - php-cli
+  - php-common
+  - php-curl
+  - php-devel
+  - php-fpm
+  - php-gd
+  - php-mbstring
+  - php-mcrypt
+  - php-opcache
+  - php-pear
+  - php-xml
+  - php-xmlrpc
+  - php-yaml
+  - php-zip
+  when: ansible_distribution == "Fedora"
+
+# Should eventually change these setttings for Fedora
+# in /etc/php.d/10-opcache.ini but too lazy right now
+# so just enable them for Ubuntu
 
 - name: Set PHP cgi.fix_pathinfo to 0
   become: true
@@ -44,6 +81,7 @@
     path: /etc/php/7.1/fpm/php.ini
     regexp: '(\s+)\;cgi\.fix_pathinfo\=1(\s+.*)?$'
     replace: '\1cgi.fix_pathinfo=0\2'
+  when: ansible_distribution == "Ubuntu"  
 
 - name: Set PHP OpCache Memory Consumption to 128MB
   become: true
@@ -51,6 +89,7 @@
     path: /etc/php/7.1/fpm/php.ini
     regexp: '(\s+)\;opcache\.memory_consumption\=128(\s+.*)?$'
     replace: '\1opcache.memory_consumption=128\2'
+  when: ansible_distribution == "Ubuntu"
 
 - name: Set PHP OpCache Interred Strings Buffer to 16MB
   become: true
@@ -58,6 +97,7 @@
     path: /etc/php/7.1/fpm/php.ini
     regexp: '(\s+)\;opcache\.interned_strings_buffer\=8(\s+.*)?$'
     replace: '\1opcache.interned_strings_buffer=16\2'
+  when: ansible_distribution == "Ubuntu"
 
 - name: Set PHP OpCache Max Accelerated Files to 10,000
   become: true
@@ -65,6 +105,7 @@
     path: /etc/php/7.1/fpm/php.ini
     regexp: '(\s+)\;opcache\.max_accelerated_files\=10000(\s+.*)?$'
     replace: '\1opcache.max_accelerated_files=10000\2'
+  when: ansible_distribution == "Ubuntu"
 
 - name: Set PHP OpCache Revalidate Frequency to 60s
   become: true
@@ -72,6 +113,7 @@
     path: /etc/php/7.1/fpm/php.ini
     regexp: '(\s+)\;opcache\.revalidate_freq\=2(\s+.*)?$'
     replace: '\1opcache.revalidate_freq=60\2'
+  when: ansible_distribution == "Ubuntu"
 
 - name: Set PHP OpCache Fast Shutdown On
   become: true
@@ -79,6 +121,7 @@
     path: /etc/php/7.1/fpm/php.ini
     regexp: '(\s+)\;opcache\.fast_shutdown\=0(\s+.*)?$'
     replace: '\1opcache.fast_shutdown=1\2'
+  when: ansible_distribution == "Ubuntu"
 
 - name: Add "extension=yaml.so" to php.ini
   become: true
@@ -87,6 +130,7 @@
     regexp: "^extension=yaml.so"
     line: "extension=yaml.so"
     state: present
+  when: ansible_distribution == "Ubuntu"
 
 - name: Add "apc.shm_size=64M" to php.ini
   become: true
@@ -96,3 +140,10 @@
     line: "apc.shm_size=64M"
     state: present
   notify: reload php
+  when: ansible_distribution == "Ubuntu"
+
+- name: Enable php-fpm
+  service:
+    name: php-fpm
+    enabled: yes
+    state: restarted

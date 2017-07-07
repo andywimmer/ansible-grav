@@ -1,2 +1,2 @@
 [prod]
-server-ip ansible_python_interpreter=/usr/bin/python3
+104.131.188.124 ansible_python_interpreter=/usr/bin/python3
