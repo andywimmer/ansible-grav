@@ -4,13 +4,17 @@ I'm learning **[Ansible](https://www.ansible.com/)** and decided to make a playb
 
 This playbook installs NGINX, PHP7.1 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from one of my other [repos](https://github.com/andywimmer/grav-nginx-configs) for now, but are basic copies of what appear in the Grav documentation.
 
-The target of this playbook is **Ubuntu Server** and I haven't tested any other distros yet. Ubuntu ships with Python3 only, so targets appearing in the hosts file must look like:  
+Supported distros include Ubuntu and Fedora.  Ubuntu ships with Python3 only, so targets appearing in the hosts file must look like:  
 
 `server-ip ansible_python_interpreter=/usr/bin/python3`
 
 This is the only way Ansible will be able to connect to a freshly spun-up Ubuntu VPS target.
 
 # Usage
+
+### Using vagrant, run "vagrant up" to provision a Fedora 25 machine running ansible
+
+**OR**
 
 ### Install Ansible on your host or 'control' machine
 
@@ -35,9 +39,10 @@ This is the only way Ansible will be able to connect to a freshly spun-up Ubuntu
 
 `$ git clone https://github.com/andywimmer/ansible-grav.git && cd ansible-grav`
 
-### Modify hosts file
+### Create hosts file
 
-Changing `server-ip` to your target IP:
+* Copy hosts.tmpl to hosts
+* Modify the hosts file by changing `server-ip` to your target IP:
 
 ```
 [prod]
@@ -46,7 +51,8 @@ server-ip ansible_python_interpreter=/usr/bin/python3
 
 ### Specify your remote user and private key file in ansible.cfg
 
-If you are using a specific user (e.g. 'ubuntu' for AWS) or SSH key for your VPS, specify them here:
+* Copy ansible.cfg.tmpl to ansible.cfg
+* If you are using a specific user (e.g. 'ubuntu' for AWS) or SSH key for your VPS, specify them here:
 
 ```
 [defaults]
@@ -112,7 +118,7 @@ Recall the first three words of this readme.
 
 This playbook does not create any users or lock down your sshd_config by disabling root login or password authentication - all of which are recommended if using for production.
 
-**This playbook deletes /var/www/html** prior to installing Grav. For a fresh VPS you're probably fine with that - but you know, warning anyway.
+**This playbook deletes /var/www/{{ domain }}** prior to installing Grav. For a fresh VPS you're probably fine with that - but you know, warning anyway.
 
 This playbook does not install Grav with SSL enabled in the NGINX site. Read the [documentation](https://learn.getgrav.org/webservers-hosting/local/nginx#using-ssl-with-an-existing-certificate) for more information on enabling SSL with an origin certificate.
 

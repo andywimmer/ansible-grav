@@ -1,16 +1,60 @@
 ---
-- name: Install Nginx
+- name: Install nginx-extras
   become: true
-  apt:
+  package:
     name: nginx-extras
     state: present
+  when: ansible_distribution =='Ubuntu'
+
+- name: Install nginx
+  become: true
+  package:
+    name: nginx
+    state: present
+  when: ansible_distribution == 'Fedora'
+
+- name: Copy nginx.conf
+  become: true
+  copy:
+    src: etc/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+
+- name: Create sites-available/sites-enabled if not already there
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items: 
+    - /etc/nginx/sites-available/
+    - /etc/nginx/sites-enabled/
+
+- name: Copy {{ domain }} sites-available configuration
+  become: true
+  template:
+    src: etc/nginx/sites-available/default.j2
+    dest: /etc/nginx/sites-available/{{ domain }}
+    owner: root
+    group: root
+    mode: 0644
+    backup: true
+
+- name: Link sites-enabled configuration
+  become: true
+  file: 
+    state: link
+    src: /etc/nginx/sites-available/{{ domain }}
+    dest: /etc/nginx/sites-enabled/{{ domain }}
     force: yes
-    update_cache: yes
 
-- name: Backup default nginx.conf
-  become: true
-  shell: mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
-
-- name: Backup default site
-  become: true
-  shell: mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+- name: Enable nginx
+  service:
+    name: nginx
+    enabled: yes
+    state: restarted

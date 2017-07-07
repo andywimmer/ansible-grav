@@ -2,17 +2,17 @@
 - name: start php
   become: true
   service:
-    name: php7.1-fpm
+    name: php-fpm
     state: started
 
 - name: reload php
   become: true
   service:
-    name: php7.1-fpm
+    name: php-fpm
     state: reloaded
 
 - name: restart php
   become: true
   service:
-    name: php7.1-fpm
+    name: php-fpm
     state: restarted
