@@ -31,7 +31,7 @@
     find /var/www/{{ domain }}/grav-admin -type d | xargs chmod 775
     find /var/www/{{ domain }}/grav-admin -type d | xargs chmod +s
     umask 0002
-   when: ansible_distribution == "Fedora"
+  when: ansible_distribution == "Fedora"
 
 - name: Set permissions on webroot (Ubuntu)
   become: true
@@ -42,4 +42,4 @@
     find /var/www/{{ domain }}/grav-admin -type d | xargs chmod 775
     find /var/www/{{ domain }}/grav-admin -type d | xargs chmod +s
     umask 0002
-   when: ansible_distribution == "Ubuntu"
+  when: ansible_distribution == "Ubuntu"
