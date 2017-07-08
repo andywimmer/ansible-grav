@@ -6,55 +6,34 @@
     dest: /tmp
     remote_src: True
 
-- name: Delete default webroot
+- name: Delete webroot
   become: true
   file:
     path: /var/www/html
     state: absent
 
-- name: Move Grav to webroot
+- name: Install Grav to webroot
   become: true
   shell: mv /tmp/grav-admin/ /var/www/html
 
-- name: Download permissions script
+- name: Set permissions on webroot (Ubuntu & Debian)
   become: true
-  get_url:
-    url: https://raw.githubusercontent.com/andywimmer/grav-nginx-configs/master/perms.sh
-    dest: /var/www/html
+  shell: |
+    chown -R www-data:www-data /var/www/html
+    find /var/www/html -type f | xargs chmod 664
+    find /var/www/html/bin -type f | xargs chmod 775
+    find /var/www/html -type d | xargs chmod 775
+    find /var/www/html -type d | xargs chmod +s
+    umask 0002
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == 'Debian'
 
-- name: chmod +x permissions script
+- name: Set permissions on webroot (Fedora)
   become: true
-  file:
-    path: /var/www/html/perms.sh
-    mode: "a+x"
-
-- name: Run permissions script
-  become: true
-  shell: cd /var/www/html/ && ./perms.sh
-
-- name: Install Grav Nginx site
-  become: true
-  get_url:
-    url: https://raw.githubusercontent.com/andywimmer/grav-nginx-configs/master/sites-available/grav
-    dest: /etc/nginx/sites-available/default
-
-- name: Configure Grav Nginx site with FQDN
-  become: true
-  replace:
-    path: /etc/nginx/sites-available/default
-    regexp: '(\s+)example\.com(\s+.*)?$'
-    replace: '\1{{ domain }}\2'
-
-- name: Configure Grav Nginx site with www.FQDN
-  become: true
-  replace:
-    path: /etc/nginx/sites-available/default
-    regexp: '(\s+)www\.example\.com\;(\s+.*)?$'
-    replace: '\1www.{{ domain }};\2'
-
-- name: Install Grav nginx.conf
-  become: true
-  get_url:
-    url: https://raw.githubusercontent.com/andywimmer/grav-nginx-configs/master/nginx.conf
-    dest: /etc/nginx/nginx.conf
-  notify: restart nginx
+  shell: |
+    chown -R apache:apache /var/www/html
+    find /var/www/html -type f | xargs chmod 664
+    find /var/www/html/bin -type f | xargs chmod 775
+    find /var/www/html -type d | xargs chmod 775
+    find /var/www/html -type d | xargs chmod +s
+    umask 0002
+  when: ansible_distribution == "Fedora"

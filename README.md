@@ -2,13 +2,15 @@
 
 I'm learning **[Ansible](https://www.ansible.com/)** and decided to make a playbook which installs the popular **[Grav](https://getgrav.org/)** flat-file CMS, which is [open-source](https://github.com/getgrav/grav). The installation and configuration are based on my production setup that hosts my personal blog.
 
-This playbook installs NGINX, PHP7.1 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from one of my other [repos](https://github.com/andywimmer/grav-nginx-configs) for now, but are basic copies of what appear in the Grav documentation.
+This playbook installs NGINX, PHP7 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from what appear in the Grav documentation.
 
-The target of this playbook is **Ubuntu Server** and I haven't tested any other distros yet. Ubuntu ships with Python3 only, so targets appearing in the hosts file must look like:  
+The latest versions of **Ubuntu**, **Debian** and **Fedora** are currently supported. Read the [QA](#qa) section for specific server scenarios.
+
+Note that Ubuntu ships with Python3 only, so targets appearing in the hosts file must look like:  
 
 `server-ip ansible_python_interpreter=/usr/bin/python3`
 
-This is the only way Ansible will be able to connect to a freshly spun-up Ubuntu VPS target.
+This is the only way Ansible will be able to connect to a freshly spun-up Ubuntu target. Debian 8 targets threw an error at that parameter during QA, however all other distros were fine with using python3.
 
 # Usage
 
@@ -114,7 +116,7 @@ This playbook does not create any users or lock down your sshd_config by disabli
 
 **This playbook deletes /var/www/html** prior to installing Grav. For a fresh VPS you're probably fine with that - but you know, warning anyway.
 
-This playbook does not install Grav with SSL enabled in the NGINX site. Read the [documentation](https://learn.getgrav.org/webservers-hosting/local/nginx#using-ssl-with-an-existing-certificate) for more information on enabling SSL with an origin certificate.
+This playbook does not install Grav with SSL enabled in the NGINX site. Read theping  [documentation](https://learn.getgrav.org/webservers-hosting/local/nginx#using-ssl-with-an-existing-certificate) for more information on enabling SSL with an origin certificate.
 
 `become: true` is peppered throughout this playbook to support AWS and the default 'ubuntu' user. I haven't looked, but if there's a better way to do this on a global level that would be great.
 
@@ -122,7 +124,14 @@ This playbook does not install Grav with SSL enabled in the NGINX site. Read the
 
 This playbook has been tested under the following scenarios:
 
-*   [AWS](https://aws.amazon.com/) EC2 VPS running Ubuntu Server 16.04
-*   [DigitalOcean](https://www.digitalocean.com/) Compute droplets running Ubuntu Server 16.04.2, 16.10 & 17.04
-*   [Vultr](https://www.vultr.com/) VC2 VPSs running Ubuntu Server 16.04, 16.10 & 17.04
+### Distros
 
+*   Ubuntu Server 16.04, 16.04.2, 16.10 & 17.04
+*   Debian 8, 8.8 & 9.0
+*   Fedora 25
+
+### Hosts
+
+*   [AWS](https://aws.amazon.com/) EC2
+*   [DigitalOcean](https://www.digitalocean.com/) Compute droplets
+*   [Vultr](https://www.vultr.com/) VC2
