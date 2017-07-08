@@ -4,13 +4,13 @@ I'm learning **[Ansible](https://www.ansible.com/)** and decided to make a playb
 
 This playbook installs NGINX, PHP7 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from what appear in the Grav documentation.
 
-The latest versions of **Ubuntu**, **Debian** and **Fedora** are currently supported. Read the [QA](#qa) section for specific server scenarios.
+The latest versions of **Ubuntu**, **Debian** and **Fedora** are currently supported. Read the QA section for specific server scenarios.
 
-Note that Ubuntu ships with Python3 only, so targets appearing in the hosts file must look like:  
-
-`server-ip ansible_python_interpreter=/usr/bin/python3`
-
-This is the only way Ansible will be able to connect to a freshly spun-up Ubuntu target. Debian 8 targets threw an error at that parameter during QA, however all other distros were fine with using python3.
+*   [Usage](#usage)
+*   [Post-installation](#post-installation)
+*   [Grav notes](#grav-notes)
+*   [Caveats](#caveats)
+*   [QA](#qa)
 
 # Usage
 
@@ -45,6 +45,11 @@ Changing `server-ip` to your target IP:
 [prod]
 server-ip ansible_python_interpreter=/usr/bin/python3
 ```
+Note that Ubuntu ships with Python3 only, so targets appearing in the hosts file must contain the parameter:  
+
+`ansible_python_interpreter=/usr/bin/python3`
+
+This is the only way Ansible will be able to connect to a freshly spun-up Ubuntu target. Other targets may require this parameter.
 
 ### Specify your remote user and private key file in ansible.cfg
 
@@ -79,6 +84,12 @@ XX.XX.XX.XX | SUCCESS => {
 2.   You will be prompted to enter your FQDN such as `domain.com` or `subdomain.example.xyz`
 
 3.   Installation will proceed
+
+### Installation notes
+
+*   This playbook supports multiple distributions and as such, contains many tasks specific to those distributions that will probably fly by in your terminal as Ansible performs tasks for your specific distribution. `stdout_callback = skippy` is enabled in ansible.cfg to minimize the overall verbosity of terminal output as it hides 'skipped' tasks. You can disable this if you prefer to see everything that is being skipped.
+
+*   Ansible will bark at the 'Set permissions on webroot' task. I plan on fixing this soon.
 
 # Post-installation
 

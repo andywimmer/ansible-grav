@@ -8,20 +8,6 @@
 - include: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
 
-- name: Link sites-enabled configuration
-  become: true
-  file:
-    state: link
-    src: /etc/nginx/sites-available/{{ domain }}
-    dest: /etc/nginx/sites-enabled/{{ domain }}
-    force: yes
-
-- name: Unlink default configuration
-  become: true
-  file:
-    path: /etc/nginx/sites-enabled/default
-    state: absent
-
 - name: Restart nginx
   become: true
   service:

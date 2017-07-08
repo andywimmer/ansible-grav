@@ -38,3 +38,17 @@
     group: root
     mode: 0644
     backup: true
+
+- name: Debian - Link sites-enabled configuration
+  become: true
+  file:
+    state: link
+    src: /etc/nginx/sites-available/{{ domain }}
+    dest: /etc/nginx/sites-enabled/{{ domain }}
+    force: yes
+
+- name: Debian - Unlink default configuration
+  become: true
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
