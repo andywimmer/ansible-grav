@@ -16,24 +16,11 @@
   become: true
   shell: mv /tmp/grav-admin/ /var/www/html
 
-- name: Set permissions on webroot (Ubuntu & Debian)
-  become: true
-  shell: |
-    chown -R www-data:www-data /var/www/html
-    find /var/www/html -type f | xargs chmod 664
-    find /var/www/html/bin -type f | xargs chmod 775
-    find /var/www/html -type d | xargs chmod 775
-    find /var/www/html -type d | xargs chmod +s
-    umask 0002
-  when: ansible_distribution == "Ubuntu" or ansible_distribution == 'Debian'
+- include: debian.yml
+  when: ansible_distribution == 'Debian'
 
-- name: Set permissions on webroot (Fedora)
-  become: true
-  shell: |
-    chown -R apache:apache /var/www/html
-    find /var/www/html -type f | xargs chmod 664
-    find /var/www/html/bin -type f | xargs chmod 775
-    find /var/www/html -type d | xargs chmod 775
-    find /var/www/html -type d | xargs chmod +s
-    umask 0002
-  when: ansible_distribution == "Fedora"
+- include: fedora.yml
+  when: ansible_distribution == 'Fedora'
+
+- include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'

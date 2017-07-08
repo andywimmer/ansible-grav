@@ -1,42 +1,9 @@
 ---
-- name: Update and upgrade packages (Ubuntu & Debian)
-  become: true
-  apt:
-    upgrade: dist
-    update_cache: yes
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-
-- name: Update and upgrade packages (Fedora)
-  dnf:
-    name: "*"
-    state: latest
-  when: ansible_distribution == 'Fedora'
-
-- name: Install base packages (Ubuntu & Fedora)
-  become: true
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-  - make
-  - ufw
-  - unzip
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Fedora'
-
-- name: Install base packages (Debian)
-  become: true
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-  - apt-transport-https
-  - make
-  - software-properties-common
-  - ufw
-  - unzip
+- include: debian.yml
   when: ansible_distribution == 'Debian'
 
-- name: Disable SELinux on Fedora
-  selinux:
-    state: disabled
+- include: fedora.yml
   when: ansible_distribution == 'Fedora'
+
+- include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'

@@ -1,75 +1,12 @@
 ---
-- name: Install nginx-extras (Ubuntu & Debian)
-  become: true
-  package:
-    name: nginx-extras
-    state: present
-    force: yes
-    update_cache: yes
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+- include: debian.yml
+  when: ansible_distribution == 'Debian'
 
-- name: Install nginx (Fedora)
-  become: true
-  package:
-    name: nginx
-    state: present
+- include: fedora.yml
   when: ansible_distribution == 'Fedora'
 
-- name: Copy nginx.conf (Ubuntu & Debian)
-  become: true
-  copy:
-    src: etc/nginx/nginx.conf
-    dest: /etc/nginx/nginx.conf
-    owner: root
-    group: root
-    mode: 0644
-    backup: yes
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-
-- name: Copy nginx.conf (Fedora)
-  become: true
-  copy:
-    src: etc/nginx/nginx.conf.fedora
-    dest: /etc/nginx/nginx.conf
-    owner: root
-    group: root
-    mode: 0644
-    backup: yes
-  when: ansible_distribution == 'Fedora'
-
-- name: Create sites-available & sites-enabled if not already there
-  become: true
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-  with_items:
-    - /etc/nginx/sites-available/
-    - /etc/nginx/sites-enabled/
-
-- name: Copy {{ domain }} sites-available configuration (Ubuntu & Debian)
-  become: true
-  template:
-    src: etc/nginx/sites-available/default.j2
-    dest: /etc/nginx/sites-available/{{ domain }}
-    owner: root
-    group: root
-    mode: 0644
-    backup: true
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-
-- name: Copy {{ domain }} sites-available configuration (Fedora)
-  become: true
-  template:
-    src: etc/nginx/sites-available/default-fedora.j2
-    dest: /etc/nginx/sites-available/{{ domain }}
-    owner: root
-    group: root
-    mode: 0644
-    backup: true
-  when: ansible_distribution == 'Fedora'
+- include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
 
 - name: Link sites-enabled configuration
   become: true
@@ -86,6 +23,7 @@
     state: absent
 
 - name: Restart nginx
+  become: true
   service:
     name: nginx
     state: restarted

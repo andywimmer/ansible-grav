@@ -1,0 +1,107 @@
+---
+- name: Debian - Add PHP repository key
+  become: true
+  apt_key:
+    url: "https://packages.sury.org/php/apt.gpg"
+    state: present
+
+- name: Debian - Add PHP repository
+  become: true
+  shell: echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+
+- name: Debian - Update and upgrade packages
+  become: true
+  apt:
+    upgrade: dist
+    update_cache: yes
+
+- name: Debian - Install PHP
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: present
+    force: yes
+    update_cache: yes
+  with_items:
+  - php7.1-cli
+  - php7.1-common
+  - php7.1-curl
+  - php7.1-dev
+  - php7.1-fpm
+  - php7.1-gd
+  - php7.1-mbstring
+  - php7.1-mcrypt
+  - php7.1-opcache
+  - php7.1-xml
+  - php7.1-xmlrpc
+  - php7.1-zip
+  - php-apcu
+  - php-pear
+  - libyaml-dev
+
+- name: Debian - Install YAML parser
+  become: true
+  shell: pecl install yaml-2.0.0
+
+- name: Debian - Set PHP cgi.fix_pathinfo to 0
+  become: true
+  replace:
+    path: /etc/php/7.1/fpm/php.ini
+    regexp: '(\s+)\;cgi\.fix_pathinfo\=1(\s+.*)?$'
+    replace: '\1cgi.fix_pathinfo=0\2'
+
+- name: Debian - Set PHP OpCache Memory Consumption to 128MB
+  become: true
+  replace:
+    path: /etc/php/7.1/fpm/php.ini
+    regexp: '(\s+)\;opcache\.memory_consumption\=128(\s+.*)?$'
+    replace: '\1opcache.memory_consumption=128\2'
+
+- name: Debian - Set PHP OpCache Interred Strings Buffer to 16MB
+  become: true
+  replace:
+    path: /etc/php/7.1/fpm/php.ini
+    regexp: '(\s+)\;opcache\.interned_strings_buffer\=8(\s+.*)?$'
+    replace: '\1opcache.interned_strings_buffer=16\2'
+
+- name: Debian - Set PHP OpCache Max Accelerated Files to 10,000
+  become: true
+  replace:
+    path: /etc/php/7.1/fpm/php.ini
+    regexp: '(\s+)\;opcache\.max_accelerated_files\=10000(\s+.*)?$'
+    replace: '\1opcache.max_accelerated_files=10000\2'
+
+- name: Debian - Set PHP OpCache Revalidate Frequency to 60s
+  become: true
+  replace:
+    path: /etc/php/7.1/fpm/php.ini
+    regexp: '(\s+)\;opcache\.revalidate_freq\=2(\s+.*)?$'
+    replace: '\1opcache.revalidate_freq=60\2'
+
+- name: Debian - Set PHP OpCache Fast Shutdown On
+  become: true
+  replace:
+    path: /etc/php/7.1/fpm/php.ini
+    regexp: '(\s+)\;opcache\.fast_shutdown\=0(\s+.*)?$'
+    replace: '\1opcache.fast_shutdown=1\2'
+
+- name: Debian - Add "extension=yaml.so" to php.ini
+  become: true
+  lineinfile:
+    dest: /etc/php/7.1/fpm/php.ini
+    regexp: "^extension=yaml.so"
+    line: "extension=yaml.so"
+    state: present
+
+- name: Debian - Add "apc.shm_size=64M" to php.ini
+  become: true
+  lineinfile:
+    dest: /etc/php/7.1/fpm/php.ini
+    regexp: "^apc.shm_size=64M"
+    line: "apc.shm_size=64M"
+    state: present
+
+- name: Debian - Restart PHP
+  service:
+    name: php7.1-fpm
+    state: restarted

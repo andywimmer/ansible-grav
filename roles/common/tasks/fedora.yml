@@ -1,0 +1,19 @@
+---
+- name: Fedora - Update and upgrade packages
+  dnf:
+    name: '*'
+    state: latest
+
+- name: Fedora - Install base packages
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - make
+  - ufw
+  - unzip
+
+- name: Fedora - Disable SELinux
+  selinux:
+    state: disabled
