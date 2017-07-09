@@ -1,0 +1,29 @@
+---
+# - name: FreeBSD - Update and upgrade packages
+#   become: true
+#   pkgng:
+#     name: '*'
+#     state: present
+
+- name: FreeBSD - Install base packages
+  become: true
+  pkgng:
+    name: "{{ item }}"
+    state: present
+  with_items:
+#  - php70-cli
+  - php71
+  - php71-curl
+#  - php70-dev
+#  - php70-fpm
+  - php71-gd
+  - php71-mbstring
+  - php71-mcrypt
+  - php71-opcache
+  - php71-xml
+  - php71-xmlrpc
+  - php71-zip
+#  - php-apcu
+#  - pear
+#  - libyaml
+  - unzip
