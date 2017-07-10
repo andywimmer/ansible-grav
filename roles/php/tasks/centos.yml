@@ -1,10 +1,4 @@
 ---
-# - name: CentOS - Add PHP repository 1
-#   become: true
-#   yum:
-#     name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-#     state: present
-
 - name: CentOS - Add PHP repository
   become: true
   yum:
