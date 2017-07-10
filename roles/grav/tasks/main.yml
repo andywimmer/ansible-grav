@@ -12,9 +12,10 @@
     path: /var/www/html
     state: absent
 
-- name: Install Grav to webroot
-  become: true
-  shell: mv /tmp/grav-admin/ /var/www/html
+- name: Create webroot
+  file:
+    path: /var/www/html
+    state: directory
 
 - include: debian.yml
   when: ansible_distribution == 'Debian'
