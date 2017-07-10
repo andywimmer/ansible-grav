@@ -1,10 +1,4 @@
 ---
-# - name: CentOS - Update and upgrade packages
-#   become: true
-#   yum:
-#     name: '*'
-#     state: latest
-
 - name: CentOS - Install base packages
   become: true
   package:
