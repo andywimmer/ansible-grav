@@ -35,3 +35,11 @@
     group: root
     mode: 0644
     backup: true
+
+- name: CentOS - Link sites-enabled configuration
+  become: true
+  file:
+    state: link
+    src: /etc/nginx/sites-available/{{ domain }}
+    dest: /etc/nginx/sites-enabled/{{ domain }}
+    force: yes
