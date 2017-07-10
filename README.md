@@ -134,7 +134,7 @@ This playbook does not install Grav with SSL enabled in the NGINX site. Read the
 
 # QA
 
-The following matrix outlines current Distro/Host compatibility for this playbook:
+The following matrix outlines current Distro/Host compatibility for this playbook. Check the issue tracker for more information on ❌s.
 
 |                | AWS | DigitalOcean | Vultr |
 |----------------|:---:|:------------:|:-----:|
