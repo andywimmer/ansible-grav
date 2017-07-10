@@ -19,7 +19,7 @@
 - name: CentOS - Copy nginx.conf
   become: true
   copy:
-    src: etc/nginx/nginx.conf.fedora
+    src: etc/nginx/nginx.conf.centos
     dest: /etc/nginx/nginx.conf
     owner: root
     group: root
@@ -29,7 +29,7 @@
 - name: CentOS - Copy {{ domain }} sites-available configuration
   become: true
   template:
-    src: etc/nginx/sites-available/default.j2
+    src: etc/nginx/sites-available/default-centos.j2
     dest: /etc/nginx/sites-available/{{ domain }}
     owner: root
     group: root
