@@ -4,7 +4,7 @@ I'm learning **[Ansible](https://www.ansible.com/)** and decided to make a playb
 
 This playbook installs NGINX, PHP7 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from what appear in the Grav documentation.
 
-The latest versions of **Ubuntu**, **Debian** and **Fedora** are currently supported. Check the QA section for a compatibility matrix.
+The latest versions of **CentOS**, **Debian**, **Fedora** and **Ubuntu** are currently supported, though there are a few inconsistencies in the configuration (specific PHP7 version, inclusion of YAML parser, etc). Check the QA section for an up-to-date distro/host compatibility matrix. If you don't care what distro you run I would recommend Ubuntu 16.04/16.04.2 at this time.
 
 *   [Usage](#usage)
 *   [Post-installation](#post-installation)
@@ -88,9 +88,7 @@ XX.XX.XX.XX | SUCCESS => {
 
 ### Installation notes
 
-*   This playbook supports multiple distributions and as such, contains many tasks specific to those distributions that will probably fly by in your terminal as Ansible performs tasks for your specific distribution. `stdout_callback = skippy` is enabled in ansible.cfg to minimize the overall verbosity of terminal output as it hides 'skipped' tasks. You can disable this if you prefer to see everything that is being skipped.
-
-*   Ansible will bark at the 'Set permissions on webroot' task. I plan on fixing this soon.
+*   This playbook supports multiple distributions and as such, contains many tasks specific to those distributions that will probably fly by in your terminal as Ansible performs tasks for _your_ specific distribution. `stdout_callback = skippy` is enabled in ansible.cfg to minimize the overall verbosity of terminal output as it hides 'skipped' tasks. You can disable this if you prefer to see everything that is being skipped.
 
 # Post-installation
 
@@ -134,15 +132,21 @@ This playbook does not install Grav with SSL enabled in the NGINX site. Read the
 
 # QA
 
-The following matrix outlines current Distro/Host compatibility for this playbook. Check the issue tracker for more information on ❌s.
+I have a deep QA background and test heavily before pushing commits. If you find a bug please file a ticket in the issue tracker and I will investigate 🤓
 
-|                | AWS | DigitalOcean | Vultr |
-|----------------|:---:|:------------:|:-----:|
-| Debian 8.0     |  🚫 |       🚫      |   ✅  |
-| Debian 8.8     |  🚫 |       ✅      |   🚫  |
-| Debian 9.0     |  🚫 |       ✅      |   ✅  |
-| Fedora 25      |  🚫 |       ✅      |   ❌  |
-| Ubuntu 16.04   |  ✅ |       🚫      |   ✅  |
-| Ubuntu 16.04.2 |  🚫 |       ✅      |   🚫  |
-| Ubuntu 16.10   |  🚫 |       ✅      |   ✅  |
-| Ubuntu 17.04   |  🚫 |       ✅      |   ✅  |
+The following matrix outlines current distro/host compatibility for this playbook. Click ❌s to view the ticket in the issue tracker. Version numbers displayed come from the host's UI.
+
+These are the only hosts I have accounts with currently - they seem like popular ones. If you run this playbook on a different host/distro combination with success _or_ failure, please let me know in the issue tracker, or send me a referral to said host so I can verify.
+
+|                 | AWS | DigitalOcean | Vultr |
+|-----------------|:---:|:------------:|:-----:|
+| CentOS '7'      |  🚫 |       🚫      |  [❌](https://github.com/andywimmer/ansible-grav/issues/4)  |
+| CentOS 7.3.1611 |  🚫 |       ✅      |   🚫  |
+| Debian 8.0      |  🚫 |       🚫      |   ✅  |
+| Debian 8.8      |  🚫 |       ✅      |   🚫  |
+| Debian 9.0      |  🚫 |       ✅      |   ✅  |
+| Fedora 25       |  🚫 |       ✅      |  [❌](https://github.com/andywimmer/ansible-grav/issues/2)  |
+| Ubuntu 16.04    |  ✅ |       🚫      |   ✅  |
+| Ubuntu 16.04.2  |  🚫 |       ✅      |   🚫  |
+| Ubuntu 16.10    |  🚫 |       ✅      |   ✅  |
+| Ubuntu 17.04    |  🚫 |       ✅      |   ✅  |
