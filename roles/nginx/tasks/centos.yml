@@ -1,0 +1,37 @@
+- name: CentOS - Install nginx
+  become: true
+  package:
+    name: nginx
+    state: present
+
+- name: CentOS - Create sites-available & sites-enabled directories
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - /etc/nginx/sites-available/
+    - /etc/nginx/sites-enabled/
+
+- name: CentOS - Copy nginx.conf
+  become: true
+  copy:
+    src: etc/nginx/nginx.conf.fedora
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+
+- name: CentOS - Copy {{ domain }} sites-available configuration
+  become: true
+  template:
+    src: etc/nginx/sites-available/default.j2
+    dest: /etc/nginx/sites-available/{{ domain }}
+    owner: root
+    group: root
+    mode: 0644
+    backup: true
