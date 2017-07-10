@@ -4,7 +4,7 @@ I'm learning **[Ansible](https://www.ansible.com/)** and decided to make a playb
 
 This playbook installs NGINX, PHP7 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from what appear in the Grav documentation.
 
-The latest versions of **Ubuntu**, **Debian** and **Fedora** are currently supported. Read the QA section for specific server scenarios.
+The latest versions of **Ubuntu**, **Debian** and **Fedora** are currently supported. Check the QA section for a compatibility matrix.
 
 *   [Usage](#usage)
 *   [Post-installation](#post-installation)
@@ -58,6 +58,7 @@ If you are using a specific user (e.g. 'ubuntu' for AWS) or SSH key for your VPS
 ```
 [defaults]
 inventory = hosts
+stdout_callback = skippy
 remote_user = root
 private_key_file = /path/to/.ssh/key_rsa
 ```
@@ -133,16 +134,15 @@ This playbook does not install Grav with SSL enabled in the NGINX site. Read the
 
 # QA
 
-This playbook has been tested under the following scenarios:
+The following matrix outlines current Distro/Host compatibility for this playbook:
 
-### Distros
-
-*   Ubuntu Server 16.04, 16.04.2, 16.10 & 17.04
-*   Debian 8, 8.8 & 9.0
-*   Fedora 25
-
-### Hosts
-
-*   [AWS](https://aws.amazon.com/) EC2
-*   [DigitalOcean](https://www.digitalocean.com/) Compute droplets
-*   [Vultr](https://www.vultr.com/) VC2
+|                | AWS | DigitalOcean | Vultr |
+|----------------|:---:|:------------:|:-----:|
+| Debian 8.0     |  🚫 |       🚫      |   ✅  |
+| Debian 8.8     |  🚫 |       ✅      |   🚫  |
+| Debian 9.0     |  🚫 |       ✅      |   ✅  |
+| Fedora 25      |  🚫 |       ✅      |   ❌  |
+| Ubuntu 16.04   |  ✅ |       🚫      |   ✅  |
+| Ubuntu 16.04.2 |  🚫 |       ✅      |   🚫  |
+| Ubuntu 16.10   |  🚫 |       ✅      |   ✅  |
+| Ubuntu 17.04   |  🚫 |       ✅      |   ✅  |
