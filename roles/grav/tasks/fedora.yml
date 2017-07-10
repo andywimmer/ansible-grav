@@ -3,10 +3,16 @@
   become: true
   shell: mv /tmp/grav-admin/* /var/www/html/.
 
-- name: Fedora - Set permissions on webroot
+- name: Fedora - Set permissions on webroot (1)
+  file:
+    path: /var/www/html
+    owner: apache
+    group: apache
+    recurse: yes
+
+- name: Fedora - Set permissions on webroot (2)
   become: true
   shell: |
-    chown -R apache:apache /var/www/html
     find /var/www/html -type f | xargs chmod 664
     find /var/www/html/bin -type f | xargs chmod 775
     find /var/www/html -type d | xargs chmod 775
