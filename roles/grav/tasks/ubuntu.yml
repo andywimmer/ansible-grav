@@ -1,4 +1,8 @@
 ---
+- name: Ubuntu - Install Grav to webroot
+  become: true
+  shell: mv /tmp/grav-admin/ /var/www/html
+
 - name: Ubuntu - Set permissions on webroot
   become: true
   shell: |

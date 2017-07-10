@@ -1,4 +1,8 @@
 ---
+- name: Debian - Install Grav to webroot
+  become: true
+  shell: mv /tmp/grav-admin/* /var/www/html/.
+
 - name: Debian - Set permissions on webroot
   become: true
   shell: |
