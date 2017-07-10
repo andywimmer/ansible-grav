@@ -8,9 +8,6 @@
 - include: fedora.yml
   when: ansible_distribution == 'Fedora'
 
-- include: freebsd.yml
-  when: ansible_distribution == 'FreeBSD'
-
 - include: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
 
