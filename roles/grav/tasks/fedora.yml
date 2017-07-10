@@ -1,7 +1,7 @@
 ---
 - name: Fedora - Install Grav to webroot
   become: true
-  shell: mv /tmp/grav-admin/ /var/www/html
+  shell: mv /tmp/grav-admin/* /var/www/html/.
 
 - name: Fedora - Set permissions on webroot
   become: true
