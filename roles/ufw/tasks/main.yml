@@ -2,15 +2,19 @@
 - name: Enable firewall
   become: true
   ufw: state=enabled policy=deny
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Fedora' or ansible_distribution == 'Ubuntu'
 
 - name: Allow HTTP
   become: true
   ufw: rule=allow port=80 proto=tcp
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Fedora' or ansible_distribution == 'Ubuntu'
 
 - name: Allow HTTPS
   become: true
   ufw: rule=allow port=443 proto=tcp
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Fedora' or ansible_distribution == 'Ubuntu'
 
 - name: Allow SSH
   become: true
   ufw: rule=allow port=22 proto=tcp
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Fedora' or ansible_distribution == 'Ubuntu'
