@@ -101,6 +101,13 @@
     regexp: '(\s+)group\s=\sapache(\s+.*)?$'
     replace: '\1group = nginx\2'
 
+- name: CentOS - Set PHP permissions
+  file:
+    path: /var/opt/remi/php71
+    owner: root
+    group: nginx
+    recurse: yes
+
 - name: CentOS - Restart PHP
   service:
     name: php71-php-fpm
