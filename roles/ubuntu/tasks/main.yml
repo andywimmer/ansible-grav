@@ -1,0 +1,22 @@
+---
+- name: Update and upgrade packages
+  become: true
+  apt:
+    upgrade: dist
+    update_cache: yes
+
+- name: Install base packages
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - make
+  - ufw
+  - unzip
+
+- include: nginx.yml
+
+- include: php.yml
+
+- include: grav.yml

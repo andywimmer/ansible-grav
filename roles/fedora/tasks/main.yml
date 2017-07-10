@@ -1,0 +1,26 @@
+---
+- name: Update and upgrade packages
+  dnf:
+    name: '*'
+    state: latest
+
+- name: Install base packages
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - libselinux-python
+  - make
+  - ufw
+  - unzip
+
+- name: Disable SELinux
+  selinux:
+    state: disabled
+
+- include: nginx.yml
+
+- include: php.yml
+
+- include: grav.yml

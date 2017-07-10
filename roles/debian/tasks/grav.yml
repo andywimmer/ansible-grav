@@ -1,0 +1,85 @@
+---
+- name: GRAV - Download Grav
+  become: true
+  unarchive:
+    src: https://github.com/getgrav/grav/releases/download/1.2.4/grav-admin-v1.2.4.zip
+    dest: /tmp
+    remote_src: True
+
+- name: GRAV - Delete webroot
+  become: true
+  file:
+    path: /var/www/html
+    state: absent
+
+- name: GRAV - Create webroot
+  become: true
+  file:
+    path: /var/www/html
+    state: directory
+
+- name: GRAV - Install Grav to webroot
+  become: true
+  shell: mv /tmp/grav-admin/* /var/www/html/.
+
+- name: GRAV - Delete grav-admin tmp directory
+  become: true
+  file:
+    path: /tmp/grav-admin
+    state: absent
+
+- name: GRAV - Copy nginx.conf
+  become: true
+  copy:
+    src: etc/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+
+- name: GRAV - Copy {{ domain }} sites-available configuration
+  become: true
+  template:
+    src: etc/nginx/sites-available/default.j2
+    dest: /etc/nginx/sites-available/{{ domain }}
+    owner: root
+    group: root
+    mode: 0644
+    backup: true
+
+- name: GRAV - Link sites-enabled configuration
+  become: true
+  file:
+    state: link
+    src: /etc/nginx/sites-available/{{ domain }}
+    dest: /etc/nginx/sites-enabled/{{ domain }}
+    force: yes
+
+- name: GRAV - Unlink default configuration
+  become: true
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: GRAV - Set permissions on webroot (1)
+  file:
+    path: /var/www/html
+    owner: www-data
+    group: www-data
+    recurse: yes
+
+- name: GRAV - Set permissions on webroot (2)
+  become: true
+  shell: |
+    find /var/www/html -type f | xargs chmod 664
+    find /var/www/html/bin -type f | xargs chmod 775
+    find /var/www/html -type d | xargs chmod 775
+    find /var/www/html -type d | xargs chmod +s
+    umask 0002
+
+- name: GRAV - Start NGINX
+  become: true
+  service:
+    name: nginx
+    state: restarted

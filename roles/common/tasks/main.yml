@@ -1,12 +1,4 @@
 ---
-- include: centos.yml
-  when: ansible_distribution == 'CentOS'
-
-- include: debian.yml
-  when: ansible_distribution == 'Debian'
-
-- include: fedora.yml
-  when: ansible_distribution == 'Fedora'
-
-- include: ubuntu.yml
-  when: ansible_distribution == 'Ubuntu'
+- name: Checking that required variables are set
+  fail: msg="CONFIG ERROR - domain is not defined in hosts file"
+  when: not domain
