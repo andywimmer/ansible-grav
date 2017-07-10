@@ -16,6 +16,9 @@
   become: true
   shell: mv /tmp/grav-admin/ /var/www/html
 
+- include: centos.yml
+  when: ansible_distribution == 'CentOS'
+
 - include: debian.yml
   when: ansible_distribution == 'Debian'
 
