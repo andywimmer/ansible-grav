@@ -1,0 +1,22 @@
+---
+- name: Disable SELinux
+  become: true
+  selinux:
+    state: disabled
+
+- name: Install base packages
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  # - epel-release
+  - make
+  - unzip
+  - yum-utils
+
+- include: nginx.yml
+
+# - include: php.yml
+
+# - include: grav.yml
