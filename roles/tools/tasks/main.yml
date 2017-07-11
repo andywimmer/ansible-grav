@@ -1,0 +1,54 @@
+---
+- name: Create webroot
+  become: true
+  file:
+    path: /var/www/html/tools
+    state: directory
+
+- name: Copy apcu.php
+  become: true
+  copy:
+    src: var/www/html/tools/apcu.php
+    dest: /var/www/html/tools/apcu.php
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+
+- name: Copy tools.{{ domain }} sites-available configuration
+  become: true
+  template:
+    src: etc/nginx/sites-available/default.j2
+    dest: /etc/nginx/sites-available/tools
+    owner: root
+    group: root
+    mode: 0644
+    backup: true
+
+- name: Link sites-enabled configuration
+  become: true
+  file:
+    state: link
+    src: /etc/nginx/sites-available/tools
+    dest: /etc/nginx/sites-enabled/tools
+    force: yes
+
+- name: Restart NGINX
+  become: true
+  service:
+    name: nginx
+    state: restarted
+
+- name: Install passlib
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - python-passlib
+
+- name: Create .htpasswd
+  become: true
+  htpasswd:
+    path: /etc/nginx/.htpasswd
+    name: 
