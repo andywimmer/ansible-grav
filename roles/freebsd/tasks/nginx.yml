@@ -1,0 +1,32 @@
+---
+- name: NGINX - Install nginx
+  become: true
+  pkgng:
+    name: nginx
+    state: present
+
+- name: NGINX - Create sites-available & sites-enabled directories
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: wheel
+    mode: 0755
+  with_items:
+    - /usr/local/etc/nginx/sites-available/
+    - /usr/local/etc/nginx/sites-enabled/
+
+- name: NGINX - Add nginx_enable="YES" to /etc/rc.conf
+  become: true
+  lineinfile:
+    dest: /etc/rc.conf
+    regexp: '^nginx_enable="YES"'
+    line: 'nginx_enable="YES"'
+    state: present
+
+- name: NGINX - Start NGINX
+  become: true
+  service:
+    name: nginx
+    state: start
