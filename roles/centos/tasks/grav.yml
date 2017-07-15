@@ -56,14 +56,14 @@
     dest: /etc/nginx/sites-enabled/{{ domain }}
     force: yes
 
-- name: GRAV - Set permissions on webroot (1)
+- name: GRAV - Set permissions on webroot (1/2)
   file:
     path: /var/www/html
     owner: nginx
     group: nginx
     recurse: yes
 
-- name: GRAV - Set permissions on webroot (2)
+- name: GRAV - Set permissions on webroot (2/2)
   become: true
   shell: |
     find /var/www/html -type f | xargs chmod 664
