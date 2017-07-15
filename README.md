@@ -151,16 +151,16 @@ The following matrix outlines current distro/host compatibility for this playboo
 
 These are the only hosts I have accounts with currently - they seem like popular ones. If you run this playbook on a different host/distro combination with success _or_ failure, please let me know in the issue tracker, or send me a referral to said host so I can verify.
 
-|                        | AWS | DigitalOcean | Vultr |
-|------------------------|:---:|:------------:|:-----:|
-| Amazon Linux 2017.03.1 |  ✅ |       ⚫      |   ⚫  |
-| CentOS '7'             |  ⚫ |       ⚫      |  [❌](https://github.com/andywimmer/ansible-grav/issues/4)  |
-| CentOS 7.3.1611        |  ⚫ |       ✅      |   ⚫  |
-| Debian '8'             |  ⚫ |       ⚫      |   ✅  |
-| Debian 8.8             |  ⚫ |       ✅      |   ⚫  |
-| Debian 9.0             |  ⚫ |       ✅      |   ✅  |
-| Fedora 25              |  ⚫ |       ✅      |  [❌](https://github.com/andywimmer/ansible-grav/issues/2)  |
-| Ubuntu 16.04           |  ✅ |       ⚫      |   ✅  |
-| Ubuntu 16.04.2         |  ⚫ |       ✅      |   ⚫  |
-| Ubuntu 16.10           |  ⚫ |       ✅      |   ✅  |
-| Ubuntu 17.04           |  ⚫ |       ✅      |   ✅  |
+|                        | AWS | DigitalOcean | Google Cloud | Vultr |
+|------------------------|:---:|:------------:|:------------:|:-----:|
+| Amazon Linux 2017.03.1 |  ✅ |       ⚫      |      ⚫      |   ⚫  |
+| CentOS '7'             |  ⚫ |       ⚫      |      [❌](https://github.com/andywimmer/ansible-grav/issues/5)       |  [❌](https://github.com/andywimmer/ansible-grav/issues/4)  |
+| CentOS 7.3.1611        |  ⚫ |       ✅      |      ⚫      |   ⚫  |
+| Debian '8'             |  ⚫ |       ⚫      |      ✅      |   ✅  |
+| Debian 8.8             |  ⚫ |       ✅      |      ⚫      |   ⚫  |
+| Debian 9.0             |  ⚫ |       ✅      |      ✅      |   ✅  |
+| Fedora 25              |  ⚫ |       ✅      |      ⚫      |  [❌](https://github.com/andywimmer/ansible-grav/issues/2)  |
+| Ubuntu 16.04           |  ✅ |       ⚫      |      ✅      |   ✅  |
+| Ubuntu 16.04.2         |  ⚫ |       ✅      |      ⚫      |   ⚫  |
+| Ubuntu 16.10           |  ⚫ |       ✅      |      ✅      |   ✅  |
+| Ubuntu 17.04           |  ⚫ |       ✅      |      ✅      |   ✅  |
