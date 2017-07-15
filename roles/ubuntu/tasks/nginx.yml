@@ -2,7 +2,7 @@
 - name: NGINX - Install nginx
   become: true
   package:
-    name: nginx-extras
+    name: nginx
     state: present
 
 - name: NGINX - Create sites-available & sites-enabled directories
