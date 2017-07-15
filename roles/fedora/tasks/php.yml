@@ -85,6 +85,7 @@
     replace: '\1/var/run/php-fpm.sock\2'
 
 - name: PHP - Restart
+  become: true
   service:
     name: php-fpm
     state: restarted

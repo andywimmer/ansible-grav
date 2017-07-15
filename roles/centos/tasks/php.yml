@@ -103,6 +103,7 @@
     recurse: yes
 
 - name: PHP - Restart
+  become: true
   service:
     name: php71-php-fpm
     state: restarted

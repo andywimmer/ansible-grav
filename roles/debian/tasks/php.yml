@@ -99,6 +99,7 @@
     state: present
 
 - name: PHP - Restart
+  become: true
   service:
     name: php7.1-fpm
     state: restarted
