@@ -57,6 +57,7 @@
     force: yes
 
 - name: GRAV - Set permissions on webroot (1/2)
+  become: true
   file:
     path: /var/www/html
     owner: nginx
