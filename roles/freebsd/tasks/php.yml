@@ -5,21 +5,25 @@
     name: "{{ item }}"
     state: present
   with_items:
-  - php71-cli
-  - php71
-  - php71-curl
-  - php71-dev
-  - php71-fpm
-  - php71-gd
-  - php71-mbstring
-  - php71-mcrypt
-  - php71-opcache
-  - php71-xml
-  - php71-xmlrpc
-  - php71-zip
-  - php71-php-apcu
-#  - pear
-#  - libyaml
+  # - php71-cli
+  - php70
+  - php70-curl
+  # - php71-dev
+  # - php71-fpm
+  - php70-gd
+  - php70-mbstring
+  - php70-mcrypt
+  - php70-opcache
+  - php70-xml
+  - php70-xmlrpc
+  - php70-zip
+  # - php71-php-apcu
+  - pear
+  - libyaml
+
+- name: PHP - Install YAML parser
+  become: true
+  shell: pecl install yaml-2.0.0
 
 - name: PHP - Add php_fpm_enable="YES" to /etc/rc.conf
   become: true
