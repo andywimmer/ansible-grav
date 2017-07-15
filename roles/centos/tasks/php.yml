@@ -11,7 +11,7 @@
 
 - name: PHP - Install
   become: true
-  yum:
+  package:
     name: "{{ item }}"
     state: present
   with_items:
@@ -81,21 +81,22 @@
     line: "apc.shm_size=64M"
     state: present
 
-- name: PHP - Set PHP www.conf user
+- name: PHP - Set www.conf user
   become: true
   replace:
     path: /etc/opt/remi/php71/php-fpm.d/www.conf
     regexp: '(\s+)user\s=\sapache(\s+.*)?$'
     replace: '\1user = nginx\2'
 
-- name: PHP - Set PHP www.conf group
+- name: PHP - Set www.conf group
   become: true
   replace:
     path: /etc/opt/remi/php71/php-fpm.d/www.conf
     regexp: '(\s+)group\s=\sapache(\s+.*)?$'
     replace: '\1group = nginx\2'
 
-- name: PHP - Set PHP permissions
+- name: PHP - Set permissions
+  become: true
   file:
     path: /var/opt/remi/php71
     owner: root
