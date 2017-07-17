@@ -2,7 +2,7 @@
 - name: GRAV - Download Grav
   become: true
   unarchive:
-    src: https://github.com/getgrav/grav/releases/download/1.2.4/grav-admin-v1.2.4.zip
+    src: https://github.com/getgrav/grav/releases/download/1.3.0/grav-admin-v1.3.0.zip
     dest: /tmp
     remote_src: True
 
