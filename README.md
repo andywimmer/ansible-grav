@@ -4,15 +4,18 @@ I'm learning **[Ansible](https://www.ansible.com/)** and decided to make a playb
 
 This playbook installs NGINX, PHP7 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from what appear in the Grav documentation.
 
+This master branch will install Grav Admin 'Vanilla' single page site. If you would like to experiment with the **[Gantry 5](http://gantry.org/)** Helium Skeleton site, you will need to clone that branch instead. Instructions are [below](#clone-repo).
+
 The latest versions of **Amazon Linux**, **CentOS**, **Debian**, **Fedora** and **Ubuntu** are currently supported, though there are a few inconsistencies in the configuration (specific PHP7 version, inclusion of YAML parser, etc). Check the QA section for an up-to-date distro/host compatibility matrix. If you don't care what distro you run I would recommend Ubuntu 16.04/16.04.2 at this time.
 
+*   [Pre-installation](#pre-installation)
 *   [Usage](#usage)
 *   [Post-installation](#post-installation)
 *   [Grav notes](#grav-notes)
 *   [Caveats](#caveats)
 *   [QA](#qa)
 
-# Usage
+# Pre-installation
 
 ### Install Ansible on your host or 'control' machine
 
@@ -31,11 +34,25 @@ The latest versions of **Amazon Linux**, **CentOS**, **Debian**, **Fedora** and 
 *   [via Apt for Debian](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-apt-debian)
 *   [more](http://docs.ansible.com/ansible/intro_installation.html#installing-the-control-machine)
 
-### Clone or download this repo
+# Usage
+
+### Clone repo
+
+Two branches are available:
+*   Master will install **Grav Admin 'Vanilla'** single-page site
+*   Gantry will install **Grav [Gantry 5](http://gantry.org/) Helium Skeleton** site
+
+#### Grav Admin 'Vanilla'
 
 1.  `$ cd /your/dev/folder`
 
 2.  `$ git clone https://github.com/andywimmer/ansible-grav.git && cd ansible-grav`
+
+#### Grav Gantry 5 Helium Skeleton
+
+1.  `$ cd /your/dev/folder`
+
+2.  `$ git clone -b gantry https://github.com/andywimmer/ansible-grav.git && cd ansible-grav`
 
 ### Modify hosts file
 
@@ -99,25 +116,25 @@ XX.XX.XX.XX | SUCCESS => {
 
 ### Run playbook
 
-1.   `$ ansible-playbook provisions.yml`
+1.  `$ ansible-playbook provisions.yml`
 
-2.   You will **not** be prompted to continue
+2.  You will **not** be prompted to continue
 
-3.   Installation will proceed
+3.  Installation will proceed
 
 # Post-installation
 
-1.   Assuming you have configured your DNS to point to your target machine, use your browser to navigate to your FQDN - otherwise use your target's IP address.
+1.  Assuming you have configured your DNS to point to your target machine, use your browser to navigate to your FQDN - otherwise use your target's IP address.
 
-2.   The Grav Admin will prompt you to create an admin user. Fill out the form and continue to the dashboard.
+2.  The Grav Admin will prompt you to create an admin user. Fill out the form and continue to the dashboard.
 
-3.   Navigate to Configuration > System > Caching section and set Cache driver to APCu.
+3.  The dashboard my display purple bar(s) indicating update(s) to Grav and/or Plugins are available. Ensure Grav update is applied before attempting to update Plugins via Dashboard > Plugins > Update All Plugins.
 
-4.   Navigate to Plugins and click Update All Plugins.
+4.  Navigate to Configuration > System > Caching section and set Cache driver to APCu.
 
-5.   Use your browser to navigate to your FQDN or IP address to view the default Grav welcome page.
+5.  Use your browser to navigate to your FQDN or IP address to view the default Grav welcome page.
 
-6.   Get [Grav'n](https://learn.getgrav.org/)!
+6.  Get [Grav'n](https://learn.getgrav.org/)!
 
 # Grav notes
 
@@ -129,7 +146,7 @@ XX.XX.XX.XX | SUCCESS => {
 
 *   If you aren't developing a custom theme for Grav or otherwise modifying the CSS or JS, you should enable those two pipelines under the Configuration > System > Assets section.
 
-  *   The Configuration > Site tab is where you may specify a site title, author name & email address, custom taxonomies, etc.
+*   The Configuration > Site tab is where you may specify a site title, author name & email address, custom taxonomies, etc.
 
 *   The Configuration > Info tab serves as a phpinfo();
 
