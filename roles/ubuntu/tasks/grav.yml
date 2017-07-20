@@ -25,7 +25,7 @@
 - name: GRAV - Delete grav-admin tmp directory
   become: true
   file:
-    path: /tmp/grav-admin
+    path: /tmp/tmp/grav-skeleton-helium-site
     state: absent
 
 - name: GRAV - Copy nginx.conf
