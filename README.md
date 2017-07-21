@@ -171,7 +171,7 @@ These are the only hosts I have accounts with currently - they seem like popular
 |                        | AWS | DigitalOcean | Google Cloud | Vultr |
 |------------------------|:---:|:------------:|:------------:|:-----:|
 | Amazon Linux 2017.03.1 |  ✅ |       ⚫      |      ⚫      |   ⚫  |
-| CentOS '7'             |  ⚫ |       ⚫      |      [❌](https://github.com/andywimmer/ansible-grav/issues/5)       |  [❌](https://github.com/andywimmer/ansible-grav/issues/4)  |
+| CentOS '7'             |  ⚫ |       ⚫      |      ✅      |  [❌](https://github.com/andywimmer/ansible-grav/issues/4)  |
 | CentOS 7.3.1611        |  ⚫ |       ✅      |      ⚫      |   ⚫  |
 | Debian '8'             |  ⚫ |       ⚫      |      ✅      |   ✅  |
 | Debian 8.8             |  ⚫ |       ✅      |      ⚫      |   ⚫  |
