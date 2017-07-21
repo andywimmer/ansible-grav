@@ -56,7 +56,15 @@
     dest: /etc/nginx/sites-enabled/{{ domain }}
     force: yes
 
-- name: GRAV - Set permissions on webroot (1/2)
+- name: GRAV - Create /var/lib/php/session
+  become: true
+  file:
+    path: /var/lib/php/session
+    state: directory
+    owner: nginx
+    group: nginx
+
+- name: GRAV - Set permissions on webroot (1/3)
   become: true
   file:
     path: /var/www/html
@@ -64,7 +72,7 @@
     group: nginx
     recurse: yes
 
-- name: GRAV - Set permissions on webroot (2/2)
+- name: GRAV - Set permissions on webroot (2/3)
   become: true
   shell: |
     find /var/www/html -type f | xargs chmod 664
@@ -72,6 +80,11 @@
     find /var/www/html -type d | xargs chmod 775
     find /var/www/html -type d | xargs chmod +s
     umask 0002
+
+- name: GRAV - Set permissions on webroot (3/3)
+  become: true
+  shell: chcon -Rv --type=httpd_sys_rw_content_t /var/www/html
+  when: ansible_selinux.status == 'enabled'
 
 - name: GRAV - Start NGINX
   become: true

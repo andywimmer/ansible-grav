@@ -6,6 +6,7 @@
     state: present
   with_items:
   - epel-release
+  - gcc
   - make
   - ufw
   - unzip
