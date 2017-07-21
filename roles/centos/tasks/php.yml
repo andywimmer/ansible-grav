@@ -1,5 +1,5 @@
 ---
-- name: PHP - Add repo
+- name: PHP - Add repository
   become: true
   yum:
     name: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
