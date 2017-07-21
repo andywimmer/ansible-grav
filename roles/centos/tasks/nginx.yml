@@ -16,3 +16,7 @@
   with_items:
     - /etc/nginx/sites-available/
     - /etc/nginx/sites-enabled/
+
+- name: NGINX - Enable service
+  become: true
+  shell: systemctl enable nginx
