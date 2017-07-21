@@ -1,82 +1,84 @@
 ---
-- name: PHP - Add repository
+- name: PHP - Add repo
   become: true
   yum:
-    name: http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    name: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
     state: present
-
-- name: PHP - Enable repository
-  become: true
-  shell: yum-config-manager --enable remi-php71
 
 - name: PHP - Install
   become: true
   package:
     name: "{{ item }}"
     state: present
+    update_cache: yes
   with_items:
-  - php71-php-cli
-  - php71-php-common
-  - php71-php-curl
-  - php71-php-devel
-  - php71-php-fpm
-  - php71-php-gd
-  - php71-php-mbstring
-  - php71-php-mcrypt
-  - php71-php-opcache
-  - php71-php-xml
-  - php71-php-xmlrpc
-  - php71-php-zip
-  - php71-php-pecl-apcu
-  - php-pear
   - libyaml-devel
+  - php71w-cli
+  - php71w-common
+  - php71w-curl
+  - php71w-devel
+  - php71w-fpm
+  - php71w-gd
+  - php71w-mbstring
+  - php71w-mcrypt
+  - php71w-opcache
+  - php71w-pear
+  - php71w-pecl-apcu
+  - php71w-process
+  - php71w-xml
+  - php71w-xmlrpc
+  - php71w-zip
+
+- name: PHP - Install YAML parser
+  become: true
+  shell: pecl install yaml-2.0.0
 
 - name: PHP - Set php.ini cgi.fix_pathinfo=0
   become: true
   replace:
-    path: /etc/opt/remi/php71/php.ini
+    path: /etc/php.ini
     regexp: '(\s+)\;cgi\.fix_pathinfo\=1(\s+.*)?$'
     replace: '\1cgi.fix_pathinfo=0\2'
 
 - name: PHP - Set php.ini opcache.memory_consumption=128
   become: true
   lineinfile:
-    dest: /etc/opt/remi/php71/php.ini
+    dest: /etc/php.ini
     regexp: '^opcache.memory_consumption=128'
     line: 'opcache.memory_consumption=128'
 
 - name: PHP - Set php.ini opcache.interred_strings_buffer=16
   become: true
   lineinfile:
-    dest: /etc/opt/remi/php71/php.ini
+    dest: /etc/php.ini
     regexp: '^opcache.interned_strings_buffer=8'
     line: 'opcache.interned_strings_buffer=16'
 
 - name: PHP - Set php.ini opcache.max_accelerated_files=10000
   become: true
   lineinfile:
-    dest: /etc/opt/remi/php71/php.ini
+    dest: /etc/php.ini
     regexp: '^opcache.max_accelerated_files=10000'
     line: 'opcache.max_accelerated_files=10000'
 
 - name: PHP - Set php.ini opcache.revalidate_freq=60
   become: true
   lineinfile:
-    dest: /etc/opt/remi/php71/php.ini
+    dest: /etc/php.ini
     regexp: '^opcache.revalidate_freq=2'
     line: 'opcache.revalidate_freq=60'
 
 - name: PHP - Set php.ini opcache.fast_shutdown=1
   become: true
   lineinfile:
-    dest: /etc/opt/remi/php71/php.ini
+    dest: /etc/php.ini
     regexp: '^opcache.fast_shutdown=0'
     line: 'opcache.fast_shutdown=1'
 
 - name: PHP - Add apc.shm_size=64M to php.ini
   become: true
   lineinfile:
-    dest: /etc/opt/remi/php71/php.ini
+    dest: /etc/php.ini
     regexp: "^apc.shm_size=64M"
     line: "apc.shm_size=64M"
     state: present
@@ -84,27 +86,23 @@
 - name: PHP - Set www.conf user
   become: true
   replace:
-    path: /etc/opt/remi/php71/php-fpm.d/www.conf
+    path: /etc/php-fpm.d/www.conf
     regexp: '(\s+)user\s=\sapache(\s+.*)?$'
     replace: '\1user = nginx\2'
 
 - name: PHP - Set www.conf group
   become: true
   replace:
-    path: /etc/opt/remi/php71/php-fpm.d/www.conf
+    path: /etc/php-fpm.d/www.conf
     regexp: '(\s+)group\s=\sapache(\s+.*)?$'
     replace: '\1group = nginx\2'
 
-- name: PHP - Set permissions
+- name: PHP - Enable service
   become: true
-  file:
-    path: /var/opt/remi/php71
-    owner: root
-    group: nginx
-    recurse: yes
+  shell: systemctl enable php-fpm
 
 - name: PHP - Restart
   become: true
   service:
-    name: php71-php-fpm
+    name: php-fpm
     state: restarted
