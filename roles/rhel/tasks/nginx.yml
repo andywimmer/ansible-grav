@@ -2,7 +2,7 @@
 - name: NGINX - Install repository
   become: true
   package:
-    name: http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
     state: present
 
 - name: NGINX - Install nginx
