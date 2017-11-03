@@ -1,10 +1,8 @@
 # Ansible Grav
 
-I'm learning **[Ansible](https://www.ansible.com/)** and decided to make a playbook which installs the popular **[Grav](https://getgrav.org/)** flat-file CMS, which is [open-source](https://github.com/getgrav/grav). The installation and configuration are based on my production setup that hosts my personal blog.
-
 This playbook installs NGINX, PHP7 and Grav. It also installs [required](https://learn.getgrav.org/basics/requirements#php-requirements) and recommended PHP modules and tweaks php.ini and [NGINX configs](https://learn.getgrav.org/webservers-hosting/local/nginx) based on Grav recommendations. These configs come from what appear in the Grav documentation.
 
-This master branch will install Grav Admin 'Vanilla' single page site. If you would like to experiment with the **[Gantry 5](http://gantry.org/)** Helium Skeleton site, you will need to clone that branch instead. Instructions are [below](#clone-repo).
+Master branch will install Grav Admin 'Vanilla' single page site. If you would like to experiment with the **[Gantry 5](http://gantry.org/)** Helium Skeleton site, you will need to clone that branch instead. Instructions are [below](#clone-repo).
 
 The latest versions of **Amazon Linux**, **CentOS**, **Debian**, **Fedora** and **Ubuntu** are currently supported, though there are a few inconsistencies in the configuration (specific PHP7 version, inclusion of YAML parser, etc). Check the QA section for an up-to-date distro/host compatibility matrix. If you don't care what distro you run I would recommend Ubuntu 16.04/16.04.2 at this time.
 
@@ -17,22 +15,9 @@ The latest versions of **Amazon Linux**, **CentOS**, **Debian**, **Fedora** and 
 
 # Pre-installation
 
-### Install Ansible on your host or 'control' machine
+### Install Ansible on your host or 'control' machine per the [instructions](http://docs.ansible.com/ansible/intro_installation.html#installing-the-control-machine)
 
-*   [macOS](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-pip):
-    1.  `$ sudo easy_install pip`
-    2.  `$ sudo pip install ansible`
-*   [via Apt for Ubuntu](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-apt-ubuntu)
-    1.  `$ sudo apt install ansible`
-    *   or  
-    1.  `$ sudo apt install software-properties-common`
-    2.  `$ sudo apt-add-repository ppa:ansible/ansible`
-    3.  `$ sudo apt update`
-    4.  `$ sudo apt install ansible`
-*   [FreeBSD](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-pkg-freebsd)
-    *   `$ sudo pkg install ansible`
-*   [via Apt for Debian](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-apt-debian)
-*   [more](http://docs.ansible.com/ansible/intro_installation.html#installing-the-control-machine)
+*   macOS: `$ sudo easy_install pip && sudo pip install ansible`
 
 # Usage
 
@@ -61,9 +46,9 @@ Two branches are available:
 server-ip domain= ansible_python_interpreter=/usr/bin/python3
 ```
 
-1.  Changing `server-ip` to your target IP
+1.  Change `server-ip` to target IP
 
-2.  Adding your FQDN after `domain=` such as:
+2.  Add FQDN after `domain=` such as:
 
     *   `domain=yourdomain.com`
 
@@ -73,21 +58,9 @@ server-ip domain= ansible_python_interpreter=/usr/bin/python3
 
     *   **do not include the 'www'**
 
-Note that some targets (like Ubuntu) ship with Python3 only, so the hosts file must contain the parameter  
+Note that some targets (like Ubuntu) ship with Python3 only, so the hosts file must contain the parameter `ansible_python_interpreter=/usr/bin/python3`
 
-`ansible_python_interpreter=/usr/bin/python3`
-
-This is the only way Ansible will be able to connect to a freshly spun-up Ubuntu target. Other targets may require this parameter, or something similar like `ansible_python_interpreter=/usr/local/bin/python3`
-
-#### Example hosts file:
-
-```
-[prod]
-10.0.0.1 domain=mydomain.net ansible_python_interpreter=/usr/bin/python3
-```
-Note that spaces matter and Ansible will bark at you if there's something wrong or if the domain is missing.
-
-### Specify your remote user and private key file in ansible.cfg
+### Modify ansible.cfg file
 
 ```
 [defaults]
@@ -97,7 +70,9 @@ remote_user=root
 private_key_file=/path/to/.ssh/key_rsa
 ```
 
-If you are using a specific user (e.g. 'ubuntu' or 'ec2-user' on AWS), or specific SSH key for your VPS specify them here.
+1.  Change `remote_user` if necessary
+
+2.  Change `private_key_file` accordingly
 
 ### Test Ansible target connection
 
@@ -116,17 +91,13 @@ XX.XX.XX.XX | SUCCESS => {
 
 ### Run playbook
 
-1.  `$ ansible-playbook provisions.yml`
-
-2.  You will **not** be prompted to continue
-
-3.  Installation will proceed
+*   `$ ansible-playbook provisions.yml`
 
 # Post-installation
 
-1.  Assuming you have configured your DNS to point to your target machine, use your browser to navigate to your FQDN - otherwise use your target's IP address.
+1.  Navigate to FQDN or IP.
 
-2.  The Grav Admin will prompt you to create an admin user. Fill out the form and continue to the dashboard.
+2.  Grav Admin will prompt you to create an admin user. Fill out the form and continue to the dashboard.
 
 3.  The dashboard my display purple bar(s) indicating update(s) to Grav and/or Plugins are available. Ensure Grav update is applied before attempting to update Plugins via Dashboard > Plugins > Update All Plugins.
 
@@ -151,8 +122,6 @@ XX.XX.XX.XX | SUCCESS => {
 *   The Configuration > Info tab serves as a phpinfo();
 
 # Caveats
-
-Recall the first three words of this readme. I'm probably not following Ansible best-practices 100%. In some areas I know I'm not. This playbook is intended to function on a variety of distributions and I've tailored it to minimize unnecessary task attempts for faster overall execution. There Is Probably A Better Way To Do It.
 
 This playbook does not create any users or lock down your sshd_config by disabling root login or password authentication - all of which are recommended if using for production.
 
