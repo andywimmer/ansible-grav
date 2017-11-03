@@ -1,5 +1,5 @@
 ---
-- name: Install
+- name: PHP - Install
   become: true
   package:
     name: "{{ item }}"
@@ -25,7 +25,7 @@
   - php71-zip
   - php71-zlib
 
-- name: Create php.ini
+- name: PHP - Create php.ini
   become: true
   file:
     state: link
@@ -33,17 +33,17 @@
     dest: /usr/local/etc/php.ini
     force: yes
 
-- name: Enable
+- name: PHP - Enable
   become: true
   shell: sysrc php_fpm_enable="YES"
 
-- name: Start
+- name: PHP - Start
   become: true
   service:
     name: php-fpm
     state: started
 
-- name: Start nginx
+- name: PHP - Start nginx
   become: true
   service:
     name: nginx

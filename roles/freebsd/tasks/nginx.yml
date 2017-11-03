@@ -1,5 +1,5 @@
 ---
-- name: Install
+- name: NGINX - Install
   become: true
   package:
     name: "{{ item }}"
@@ -7,11 +7,11 @@
   with_items:
   - nginx
 
-- name: Enable
+- name: NGINX - Enable
   become: true
   shell: sysrc nginx_enable="YES"
 
-- name: Install nginx.conf
+- name: NGINX - Install nginx.conf
   become: true
   copy:
     src: usr/local/etc/nginx/nginx.conf
@@ -21,7 +21,7 @@
     mode: 0644
     backup: yes
 
-- name: Create sites-available & sites-enabled directories
+- name: NGINX - Create sites-available & sites-enabled directories
   become: true
   file:
     path: "{{ item }}"
