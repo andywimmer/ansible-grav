@@ -21,7 +21,7 @@
 
 - name: Install APCu
   become: true
-  shell: cd /usr/ports/devel/pecl-APCu/ && sudo make install clean
+  shell: cd /usr/ports/devel/pecl-APCu/ && make install clean
 
 - name: Download
   become: true
