@@ -1,0 +1,100 @@
+---
+- name: Install make.conf
+  become: true
+  copy:
+    src: etc/make.conf
+    dest: /etc/make.conf
+    owner: root
+    group: wheel
+
+- name: Install dependencies
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - gmake
+  - help2man
+  - m4
+  - perl5
+  - texinfo
+
+- name: Install APCu
+  become: true
+  shell: cd /usr/ports/devel/pecl-APCu/ && sudo make install clean
+
+- name: Download
+  become: true
+  unarchive:
+    src: https://github.com/getgrav/grav/releases/download/1.3.8/grav-admin-v1.3.8.zip
+    dest: /tmp
+    remote_src: true
+
+- name: Initialize webroot (1/2)
+  become: true
+  file:
+    path: /usr/local/www
+    state: absent
+
+- name: Initialize webroot (2/2)
+  become: true
+  file:
+    path: /usr/local/www
+    state: directory
+
+- name: Install to webroot (1/2)
+  become: true
+  shell: mv /tmp/grav-admin/* /usr/local/www/.
+
+- name: Install to webroot (2/2)
+  become: true
+  file:
+    path: /tmp/grav-admin
+    state: absent
+
+- name: Install {{ domain }} nginx sites-available configuration (1/2)
+  become: true
+  template:
+    src: usr/local/etc/nginx/sites-available/default.j2
+    dest: /usr/local/etc/nginx/sites-available/{{ domain }}
+    owner: root
+    group: wheel
+    mode: 0644
+    backup: true
+
+- name: Install {{ domain }} nginx sites-available configuration (2/2)
+  become: true
+  file:
+    state: link
+    src: /usr/local/etc/nginx/sites-available/{{ domain }}
+    dest: /usr/local/etc/nginx/sites-enabled/{{ domain }}
+    force: yes
+
+- name: Set webroot permissions (1/2)
+  become: true
+  file:
+    path: /usr/local/www
+    owner: www
+    group: www
+    recurse: yes
+
+- name: Set webroot permissions (2/2)
+  become: true
+  shell: |
+    find /var/www/html -type f | xargs chmod 664
+    find /var/www/html/bin -type f | xargs chmod 775
+    find /var/www/html -type d | xargs chmod 775
+    find /var/www/html -type d | xargs chmod +s
+    umask 0002
+
+- name: Restart php-fpm
+  become: true
+  service:
+    name: php-fpm
+    state: restarted
+
+- name: Restart nginx
+  become: true
+  service:
+    name: nginx
+    state: restarted

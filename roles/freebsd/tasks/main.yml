@@ -1,14 +1,6 @@
 ---
-- name: Update and upgrade packages
-  pkgng:
-    name: '*'
-    state: present
-
-- name: Install base packages
-  pkgng:
-    name: "{{ item }}"
-    state: present
-  with_items:
-  - unzip
-
 - include: nginx.yml
+
+- include: php.yml
+
+- include: grav.yml
