@@ -1,0 +1,50 @@
+---
+- name: PHP - Install
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - php71
+  - php71-ctype
+  - php71-curl
+  - php71-dom
+  - php71-filter
+  - php71-gd
+  - php71-hash
+  - php71-json
+  - php71-mbstring
+  - php71-mcrypt
+  - php71-mysqli
+  - php71-opcache
+  - php71-openssl
+  - php71-session
+  - php71-simplexml
+  - php71-xml
+  - php71-xmlrpc
+  - php71-zip
+  - php71-zlib
+
+- name: PHP - Create php.ini
+  become: true
+  file:
+    state: link
+    src: /usr/local/etc/php.ini-production
+    dest: /usr/local/etc/php.ini
+    force: yes
+
+- name: PHP - Enable
+  become: true
+  shell: sysrc php_fpm_enable="YES"
+
+- name: PHP - Start
+  become: true
+  service:
+    name: php-fpm
+    state: started
+
+- name: PHP - Start nginx
+  become: true
+  service:
+    name: nginx
+    state: started

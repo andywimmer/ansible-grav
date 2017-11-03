@@ -1,0 +1,34 @@
+---
+- name: NGINX - Install
+  become: true
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - nginx
+
+- name: NGINX - Enable
+  become: true
+  shell: sysrc nginx_enable="YES"
+
+- name: NGINX - Install nginx.conf
+  become: true
+  copy:
+    src: usr/local/etc/nginx/nginx.conf
+    dest: /usr/local/etc/nginx/nginx.conf
+    owner: root
+    group: wheel
+    mode: 0644
+    backup: yes
+
+- name: NGINX - Create sites-available & sites-enabled directories
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: wheel
+    mode: 0755
+  with_items:
+    - /usr/local/etc/nginx/sites-available/
+    - /usr/local/etc/nginx/sites-enabled/

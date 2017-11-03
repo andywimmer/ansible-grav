@@ -4,34 +4,40 @@
     - group_by: key=os_{{ ansible_distribution }}
 
 - hosts: os_Amazon
-  gather_facts: False
+  gather_facts: false
   roles:
     - common
     - amazon
 
 - hosts: os_CentOS
-  gather_facts: False
+  gather_facts: false
   roles:
     - common
     - centos
     - ufw
 
 - hosts: os_Debian
-  gather_facts: False
+  gather_facts: false
   roles:
     - common
     - debian
     - ufw
 
 - hosts: os_Fedora
-  gather_facts: False
+  gather_facts: false
   roles:
     - common
     - fedora
     - ufw
 
+- hosts: os_FreeBSD
+  gather_facts: false
+  roles:
+    - common
+    - freebsd
+
 - hosts: os_Ubuntu
-  gather_facts: False
+  gather_facts: false
   roles:
     - common
     - ubuntu
